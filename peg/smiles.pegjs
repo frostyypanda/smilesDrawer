@@ -74,8 +74,17 @@ bracketatom = '[' b:bracketcontent ']' {
     }
 }
 
-bracketcontent = b:(isotope? ('se' / 'as' / aromaticsymbol / elementsymbol / wildcard) chiral? hcount? charge? class?) {
+bracketcontent = b:(isotope? ('se' / 'as' / aromaticsymbol / customlabel / elementsymbol / wildcard) chiral? hcount? charge? class?) {
 	return b;
+}
+
+// Custom label for any abbreviation in square brackets
+// Accepts any alphanumeric string starting with uppercase letter
+customlabel = c:([A-Z][A-Za-z0-9]*) {
+    if(Array.isArray(c)) {
+        return c[0] + (c[1] ? c[1].join('') : '');
+    }
+    return c;
 }
 
 organicsymbol = o:('B''r'? / 'C''l'? / [NOPSFI]) {
